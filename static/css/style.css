@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
+  flex-wrap: wrap;
   width: 100%;
   align-items: center;
   color: #fff;
@@ -16,7 +17,7 @@
   background-color: #7e4136;
 }
 .displayimage {
-  overflow: hidden;
+  /* overflow: hidden; */
   position: relative;
   width: 500px;
   height: 90vh;
@@ -83,5 +84,15 @@
   100% {
     right: 0px;
     top: 0px;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .displayimage {
+    top: 50px;
+    position: absolute;
+  }
+  .maininfo {
+    margin-top: 60px;
   }
 }
