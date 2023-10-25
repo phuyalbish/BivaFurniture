@@ -3,10 +3,12 @@
 <title>{% block title %}Home{% endblock title %}</title>
 
 {%block maincontent%}
+<div class="navbar">{% include 'partials/navbar.html' %}</div>
 <div class="home_midcontent">
-  <img src="{% static 'images/logo.png' %}" class="logo_img" />
   <h1>Biva Furniture</h1>
   <p>we have main content</p>
+
+  <!-- <div class="footer">{% include 'partials/footer.html' %}</div> -->
 </div>
 
 {%endblock maincontent%}

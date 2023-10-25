@@ -6,7 +6,7 @@ def home(request):
     context = {
         'vars': 'ok'
     }
-    return render(request, "footer.html", context)
+    return render(request, "home.html", context)
 
 def products(request):
     context = {
