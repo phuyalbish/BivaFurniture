@@ -12,6 +12,8 @@ class Branch extends Model
     protected $primaryKey = "id";
 
 
+    protected $fillable = ['name'];
+
     public function items()
     {
         return $this->hasMany(Product::class);

@@ -3,9 +3,11 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DeveloperController;
+use App\Http\Controllers\BranchController;
+use App\Http\Controllers\HomeController;
 
 
-Route::get('', [ProductController::class, 'home'])->name('home');
+Route::get('', [HomeController::class, 'home'])->name('home');
 
 Route::get('/contact', function () {
     return view('contact');
@@ -21,3 +23,18 @@ Route::get('/aboutus', function () {
     Route::get('login', [DeveloperController::class,'CmsLogin'])->middleware('ChecktheDeveloperDashboard')->name('developer.login');
     Route::post('loginCheck', [DeveloperController::class,'CmsLoginCheck'])->name('developer.loginCheck');
 Route::get('signout', [DeveloperController::class,'CmsSignOut'])->name('developer.signout');
+
+
+
+
+// CURD OPERATION
+
+// CATEGORY
+Route::post('/category/store', [BranchController::class, 'store'])->name('category.store');
+Route::delete('/category/delete/{id}', [BranchController::class, 'destroy'])->name('category.destroy');
+Route::post('/category/edit/{id}', [BranchController::class, 'edit'])->name('category.edit');
+
+// PRODUCT
+Route::post('/category/store', [ProductController::class, 'store'])->name('furniture.store');
+Route::delete('/category/delete/{id}', [ProductController::class, 'destroy'])->name('furniture.destroy');
+Route::post('/category/edit/{id}', [ProductController::class, 'edit'])->name('furniture.edit');

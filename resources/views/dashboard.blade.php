@@ -16,11 +16,19 @@
   
   <body>
     <div class="container">
-						  <h2>Admin Panel</h2>
-					
-						<a href="{{route('developer.signout')}}" class="btn btn-success" data-toggle="modal"><span>Signout</span></a>
-					
-			<br><br>
+				<h2>Admin Panel</h2>
+				<a href="{{route('developer.signout')}}" class="btn btn-success" data-toggle="modal"><span>Signout</span></a>
+				@if(session('success'))
+					<div class="alert alert-success">
+						{{ session('success') }}
+					</div>
+				@endif
+
+				@if(session('error'))
+					<div class="alert alert-danger">
+						{{ session('error') }}
+					</div>
+				@endif
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
@@ -68,7 +76,8 @@
 						<td>{{ $item['category'] }}</td>
 						<td>{{ $item['material'] }}</td>
                         <td>
-                            <a href="#editFurnitureModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a onclick="editfur('{{ $item['id'] }}', '{{ $item['name'] }}','{{ $item['description'] }}','{{ $item['image_path'] }}','{{ $item['price'] }}','{{ $item['category'] }}','{{ $item['material'] }}')" 
+							href="#editFurnitureModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                             <a href="#deleteFurnitureModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                         </td>
                     </tr> 
@@ -108,6 +117,7 @@
                 <tbody>
                    				
 						  @foreach($branch_array as $item)	
+						  
 					<tr>
 						<td>
 							<span class="custom-checkbox">
@@ -117,8 +127,9 @@
 						</td>	
 						<td>{{ $item['name'] }}</td>
                         <td>
-                            <a href="#editCatModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                            <a href="#deleteCatModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+
+                            <a onclick="editCat('{{ $item['id'] }}', '{{ $item['name'] }}')" href="#editCatModal"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="#deleteCateModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                         </td>
                     </tr> 
 					@endforeach
@@ -127,10 +138,13 @@
 			
         </div>
     </div>
+
+	<!-- Add Furniture -->
 	<div id="addFurnitureModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+				<form method="post" action="{{ route('furniture.store') }}">
+					@csrf
 					<div class="modal-header">						
 						<h4 class="modal-title">Add Furniture</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -138,36 +152,34 @@
 					<div class="modal-body">					
 						<div class="form-group">
 							<label>Name</label>
-							<input type="text" class="form-control" required>
+							<input type="text" name="name" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Description</label>
-							<input type="email" class="form-control" required>
+							<input type="text" nmae="description" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Image</label>
-							<input type="file" name="image" accept="image/*" required>
+							<input type="text" name="image_path" required>
 						</div>
 						<div class="form-group">
-<label for="category_id">Category:</label>
-        <select name="category_id" required>
-           
-            @foreach($branch_array as $item)	
-                <option value="{{ $item['id']}}"> 
-                    {{ $item['name'] }}
-                </option>
-            @endforeach
-        </select>
-
-</div>
+						<label for="category_id">Category:</label>
+								<select name="branch_id" required>
+									@foreach($branch_array as $item)	
+										<option value="{{ $item['id']}}"> 
+											{{ $item['name'] }}
+										</option>
+									@endforeach
+								</select>
+						</div>
 						
 						<div class="form-group">
 							<label>Price</label>
-							<input type="text" class="form-control" required>
+							<input type="text" name="price" class="form-control" required>
 						</div>			
 						<div class="form-group">
 							<label>Material Used</label>
-							<input type="text" class="form-control" required>
+							<input type="text" name="material" class="form-control" required>
 						</div>					
 					</div>
 					<div class="modal-footer">
@@ -178,12 +190,12 @@
 			</div>
 		</div>
 	</div>
-
-	<!-- Add Branch -->
+	<!-- Add Category -->
 	<div id="addCatModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+				<form method="post" action="{{ route('category.store') }}"> 
+					@csrf
 					<div class="modal-header">						
 						<h4 class="modal-title">Add Category</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -191,7 +203,7 @@
 					<div class="modal-body">					
 						<div class="form-group">
 							<label>Name</label>
-							<input type="text" class="form-control" required>
+							<input type="text" name = "name" class="form-control" required>
 						</div>				
 					</div>
 					<div class="modal-footer">
@@ -206,31 +218,33 @@
 	<div id="editFurnitureModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+				<form >
+					<input type="hidden" name="fur_id">
 					<div class="modal-header">						
-						<h4 class="modal-title">Edit Employee</h4>
+						<h4 class="modal-title">Edit Furniture</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
 						<div class="form-group">
 							<label>Name</label>
-							<input type="text" class="form-control" required>
+							<input type="text" id ="fur_name" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Description</label>
-							<input type="email" class="form-control" required>
+							<input type="text" id ="fur_des" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Image</label>
-							<textarea class="form-control" required></textarea>
+							
+							<input type="file"  id ="fur_img" name="image" accept="image/*" required>
 						</div>
 						<div class="form-group">
 							<label>Price</label>
-							<input type="text" class="form-control" required>
+							<input type="number" id ="fur_price" class="form-control" required>
 						</div>			
 						<div class="form-group">
 							<label>Material Used</label>
-							<input type="text" class="form-control" required>
+							<input type="text" id ="fur_mat" class="form-control" required>
 						</div>					
 					</div>
 					<div class="modal-footer">
@@ -241,11 +255,60 @@
 			</div>
 		</div>
 	</div>
-	<!-- Delete Modal HTML -->
-	<div id="deleteFurnitureeModal" class="modal fade">
+	<!-- Edit Category HTML -->
+	<div id="editCatModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+				<form method="post" id = "editcategoryform"  action="">
+					@csrf
+				<input type="hidden" id="cat_id" name="cat_id">
+					<div class="modal-header">						
+						<h4 class="modal-title">Edit Category</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						<div class="form-group">
+							<label>Name</label>
+							<input type="text" name="name" id="cat_name" class="form-control" required>
+						</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="submit" class="btn btn-info" value="Save">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- Delete Furniture HTML -->
+	<div id="deleteFurnitureModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form method="POST"  action="{{ route('furniture.destroy', $item['id']) }}">
+					@csrf
+					@method('DELETE')
+					<div class="modal-header">						
+						<h4 class="modal-title">Delete Furniture</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						<p>Are you sure you want to delete this Furniture.</p>
+						<p class="text-warning"><small>This action cannot be undone.</small></p>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="submit" class="btn btn-danger" value="Delete">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- Delete Category HTML -->
+	<div id="deleteCateModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form method="POST"  action="{{ route('category.destroy', $item['id']) }}">
+					@csrf
+					@method('DELETE')
 					<div class="modal-header">						
 						<h4 class="modal-title">Delete Furniture</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -263,48 +326,26 @@
 		</div>
 	</div>
 
-	<!-- Edit Category HTML -->
-	<div id="editCatModal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form>
-					<div class="modal-header">						
-						<h4 class="modal-title">Edit Category</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">					
-						<div class="form-group">
-							<label>Name</label>
-							<input type="text" class="form-control" required>
-						</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-info" value="Save">
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<!-- Delete Modal HTML -->
-	<div id="deleteCateModal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form>
-					<div class="modal-header">						
-						<h4 class="modal-title">Delete Category</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">					
-						<p>Are you sure you want to delete this Category.</p>
-						<p class="text-warning"><small>This action cannot be undone.</small></p>
-					</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-danger" value="Delete">
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+
+
+
+
+	<script>
+			function  editCat(id,name){
+					const actionsformcat = "{{ route('category.edit', ['id' => ':id']) }}".replace(':id', id);
+					document.getElementById("editcategoryform").action = actionsform;
+					document.getElementById("cat_name").value = ""+name;
+			}
+			function  editfur(id, name, description, image, price, category, material){
+					const actionsformfur = "{{ route('product.edit', ['id' => ':id']) }}".replace(':id', id);
+					document.getElementById("fur_id").value = ""+id;
+					document.getElementById("fur_name").value = ""+name;
+					document.getElementById("fur_des").value = ""+description;
+					// document.getElementById("fur_img").value = ""+image;
+					document.getElementById("fur_price").value = price;
+					document.getElementById("fur_category").value = ""+category;
+					document.getElementById("fur_mat").value = ""+material;
+			}
+	</script>
 </body>
 </html>

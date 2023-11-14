@@ -44,14 +44,6 @@ class DeveloperController extends Controller
         $products = $item->joinCategory()->select('products.*', 'branches.name as category') ->get();
 
 
-        // $items = DB::table('items')
-        // ->join('categories', 'items.category_id', '=', 'categories.id')
-        // ->select('items.id', 'items.name', 'categories.name as category')
-        // ->where('categories.id', $categoryId)
-        // // ->get();
-        // $items = Item::with('category')->get();
-
-
         $product_array = $products->toArray();
          return view('dashboard',[ 'branch_array' => $branches->toArray(), 'product_array' => $products->toArray() ]);
    

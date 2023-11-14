@@ -3,17 +3,47 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Branch;
 use App\Models\Product;
 
 class ProductController extends Controller
 {
-    public function home(){
-        $item = new Product;
-        $branches = Branch::all();
-        $products = $item->joinCategory()->select('products.*', 'branches.name as category') ->get();
-        
 
-         return view('home',[ 'branch_array' => $branches->toArray(), 'product_array' => $products->toArray() ]);
+
+
+
+public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+        ]);
+
+        Product::create($request->all());
+
+        return redirect()->route('developer.dashboard')->with('success', 'Product created successfully');
+    }
+
+   
+
+ public function destroy($id)
+    {
+        $item = Product::find($id);
+
+        if (!$item) {
+            return redirect()->route('developer.dashboard')->with('error', 'Product not found');
+        }
+
+        $item->delete();
+
+        return redirect()->route('developer.dashboard')->with('success', 'Product deleted successfully');
+    }
+
+    public function edit(Request $request, $id)
+    {
+
+
+         $record = Product::find($id);
+        $newValues = $request->all();
+        $record->update($newValues);
+        return redirect()->route('developer.dashboard')->with('success', 'Product created successfully');
     }
 }
