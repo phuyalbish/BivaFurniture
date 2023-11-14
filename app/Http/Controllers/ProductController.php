@@ -13,41 +13,30 @@ class ProductController extends Controller
 
 public function store(Request $request)
     {
-        $image = $request->image_path;
-        $img_name = $image->getClientOriginalName();
+            $validatedData = $request->validate([
+            'image_path' => 'required|file|max:2048', // 'file' field is required, must be a file, and its maximum size is 2048 KB (2 MB)
+            ]);
+        
+            $image = $request->image_path;
+            $img_name = $image->getClientOriginalName();
 
-        $del_img = public_path('storage/images/'.$img_name);
-                if(file_exists($del_img)){
-                    unlink($del_img);
-                }
+            $del_img = public_path('storage/images/'.$img_name);
+                    if(file_exists($del_img)){
+                        unlink($del_img);
+                    }
 
-        $image->storeAs('public/images', $img_name);
-        // return dd($name);
-        $uploaddata = new Product;
-        $uploaddata->name = $request->name;
-        $uploaddata->description = $request->description;
-        $uploaddata->price = $request->price;
-        $uploaddata->material = $request->material;
-        $uploaddata->branch_id = $request->branch_id;
-        $uploaddata->image_path = $img_name;
-
-        $uploaddata->save();
-
-        return redirect()->route('developer.dashboard')->with('success', 'Product created successfully');
-
-
-        // if ($request->hasFile('image')) {
-        //     // Delete the old image if it exists
-        //     if ($record->image_path) {
-        //         Storage::delete($record->image_path);
-        //     }
-
-        //     // Handle the new image upload
-        //     $newImagePath = $request->file('image')->store('images');
-
-        //     // Update the model with the new image path
-        //     $record->update(['image_path' => $newImagePath]);
-        // }
+            $image->storeAs('public/images', $img_name);
+            // return dd($name);
+            $uploaddata = new Product;
+            $uploaddata->name = $request->name;
+            $uploaddata->description = $request->description;
+            $uploaddata->price = $request->price;
+            $uploaddata->material = $request->material;
+            $uploaddata->branch_id = $request->branch_id;
+            $uploaddata->image_path = $img_name;
+            $uploaddata->save();
+            return redirect()->route('developer.dashboard')->with('success', 'Product created successfully');
+    
     }
 
    
@@ -70,24 +59,18 @@ public function store(Request $request)
 
     public function edit(Request $request, $id)
     {
-
+                $validatedData = $request->validate([
+            'image_path' => 'file|nullable|max:2048', // 'file' field can be nullable, must be a file if present, and its maximum size is 2048 KB (2 MB)
+        ]);
          $record = Product::find($id);
-
-
-        $record->update([
+            $record->update([
                     'name' => $request->name,
                     'description'=>$request->description,
                     'price'=>$request->price,
                     'material'=>$request->material,
                     'branch_id'=>$request->branch_id,
-                
                 ]);
-         if($request->image_path != null ){
-
-
-
-
-            
+            if($request->image_path != null ){
                 $image = $request->image_path;
                 $img_name = $image->getClientOriginalName();
                 $del_img = public_path('storage/images/'.$img_name);
@@ -101,13 +84,9 @@ public function store(Request $request)
                 $image->storeAs('public/images', $img_name);
                 $record->update([
                     'image_path' => $img_name
-                
                 ]);
-               
-         }
+            }
             return redirect()->route('developer.dashboard')->with('success', 'Product updated successfully');
-
-         
-       
+          
     }
 }

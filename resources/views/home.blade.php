@@ -72,7 +72,6 @@ Home
   </div>
 </div>
 
-<br><br><br>
 <div class="home_midcontent">
 
 

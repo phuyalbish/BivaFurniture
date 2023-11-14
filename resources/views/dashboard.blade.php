@@ -18,17 +18,20 @@
     <div class="container">
 				<h2>Admin Panel</h2>
 				<a href="{{route('developer.signout')}}" class="btn btn-success" data-toggle="modal"><span>Signout</span></a>
+				<br>
+				<br>
+				@if(session('error'))
+					<div class="alert alert-danger">
+						{{ session('error') }}
+						asddad
+					</div>
+				 @endif
 				@if(session('success'))
 					<div class="alert alert-success">
 						{{ session('success') }}
 					</div>
 				@endif
 
-				@if(session('error'))
-					<div class="alert alert-danger">
-						{{ session('error') }}
-					</div>
-				@endif
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
@@ -79,8 +82,10 @@
 
 							)" 
 							href="#editFurnitureModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+							
 							<a  onclick="delFur('{{ $item['id'] }}')" href="#deleteFurnitureModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                        </td>
+							
+						</td>
                     </tr> 
 
 						@endforeach
@@ -116,6 +121,10 @@
                     </tr>
                 </thead>
                 <tbody>
+								<?php $count = 0 ?>
+					@foreach($branch_array as $item)	
+								<?php $count = $count+1 ?>
+					@endforeach
                    				
 						  @foreach($branch_array as $item)	
 						  
@@ -135,8 +144,11 @@
 							'{{ $item['name'] }}'
 							)"
 							 href="#editCatModal"  class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                            <a  href="#deleteCatModal" class="delete" onclick="delCat('{{ $item['id'] }}')" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                        </td>
+							
+								<a  href="#deleteCatModal" class="delete" onclick="delCat('{{ $item['id'] }}')" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							
+
+							</td>
                     </tr> 
 					@endforeach
                 </tbody>
@@ -149,8 +161,9 @@
 	<div id="deleteFurnitureModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form method="POST" id="deletefurnitureform" action="{{route('furniture.destroy', $item['id']) }}">
-					@csrf
+				<form method="POST" id="deletefurnitureform" action="">
+				<form>	
+				@csrf
 					@method('DELETE')
 					<div class="modal-header">						
 						<h4 class="modal-title">Delete Furniture</h4>
@@ -172,7 +185,7 @@
 	<div id="deleteCatModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form method="POST"  id="deletecategoryform"  action="{{ route('category.destroy', $item['id']) }}">
+				<form method="POST"  id="deletecategoryform"  action="">
 					@csrf
 					@method('DELETE')
 					<div class="modal-header">						
@@ -195,7 +208,7 @@
 	<div id="addFurnitureModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form enctype="multipart/form-data" method="post" action="{{ route('furniture.store') }}">
+				<form id="addfurniture" enctype="multipart/form-data" method="post" action="{{ route('furniture.store') }}">
 					@csrf
 					<div class="modal-header">						
 						<h4 class="modal-title">Add Furniture</h4>
@@ -212,8 +225,11 @@
 						</div>
 						<div class="form-group">
 							<label>Image</label>
-							<input type="file" name="image_path"   accept="image/*" required>
+							<input type="file" name="image_path" accept="image/*" required>
 						</div>
+						<div class="alert alert-success" id="errorimage">
+							Image size must be less than 2Mb.
+							</div>
 						<div class="form-group">
 						<label for="category_id">Category:</label>
 								<select name="branch_id" required>
@@ -224,7 +240,7 @@
 									@endforeach
 								</select>
 						</div>
-						
+						<br>
 						<div class="form-group">
 							<label>Price</label>
 							<input type="number" name="price" class="form-control" required>
@@ -287,11 +303,11 @@
 							<input type="text" name="description" id="fur_des" class="form-control" required>
 						</div>
 						<div class="form-group" >
-							<img src="" id="fur_image" alt="what" max-width=100 height=100 class="col-sm-3" >
+							<img src="{" id="fur_image" alt="what" max-width=100 height=100 class="col-sm-3" ">
 							<input type="file" name="image_path"  class="col-sm-6"   accept="image/*" >
 						</div>
-<br><br>
-<br>
+						<br><br>
+						<br>
 						<div class="form-group">
 						<label for="category_id">Category:</label>
 								<select name="branch_id" id="fur_cat" required>
@@ -351,6 +367,7 @@
 
 
 	<script>
+
 			function  editFur(id, name, description, image, price, category, material){
 					var actionsformfur = "{{ route('furniture.edit', ['id' => ':id']) }}".replace(':id', id);
 					document.getElementById("editfurnitureform").action = actionsformfur;
@@ -368,13 +385,15 @@
 					document.getElementById("cat_name").value = ""+name;
 			}
 			function delCat(id){
-				const actionform = "{{ route('category.destroy', ['id' => ':id']) }}".replace(':id', id);;
+				const actionform = "{{ route('category.destroy', ['id' => ':id']) }}".replace(':id', id);
 				document.getElementById("deletecategoryform").action =  actionform;
 			}
 			function delFur(id){
-				const actionform = "{{ route('furniture.destroy', ['id' => ':id']) }}".replace(':id', id);;
+				const actionform = "{{ route('furniture.destroy', ['id' => ':id']) }}".replace(':id', id);
 				document.getElementById("deletefurnitureform").action =  actionform;
 			}
+
+			
 	</script>
 </body>
 </html>
