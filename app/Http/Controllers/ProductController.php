@@ -16,6 +16,11 @@ public function store(Request $request)
         $image = $request->image_path;
         $img_name = $image->getClientOriginalName();
 
+        $del_img = public_path('storage/images/'.$img_name);
+                if(file_exists($del_img)){
+                    unlink($del_img);
+                }
+
         $image->storeAs('public/images', $img_name);
         // return dd($name);
         $uploaddata = new Product;
@@ -28,25 +33,21 @@ public function store(Request $request)
 
         $uploaddata->save();
 
-        // return dd($request->file("image_path")->getClientOriginalName());
-        // $request->validate([
-        //     'name' => 'required',
-        //     // 'image_path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        // ]);
-
-        // $imagePath = $request->file('image_path')->store('images'); // 'images' is the storage path
-
-        // Product::create([
-        //     'image_path' => $imagePath,
-        //     'name' => $request->input('name'),
-        //     'description' => $request->input('description'),
-        //     'price' => $request->input('price'),
-        //     'material' => $request->input('material'),
-        //     'branch_id' => $request->input('branch_id'),
-        // ]);
-        
-
         return redirect()->route('developer.dashboard')->with('success', 'Product created successfully');
+
+
+        // if ($request->hasFile('image')) {
+        //     // Delete the old image if it exists
+        //     if ($record->image_path) {
+        //         Storage::delete($record->image_path);
+        //     }
+
+        //     // Handle the new image upload
+        //     $newImagePath = $request->file('image')->store('images');
+
+        //     // Update the model with the new image path
+        //     $record->update(['image_path' => $newImagePath]);
+        // }
     }
 
    
@@ -58,7 +59,10 @@ public function store(Request $request)
         if (!$item) {
             return redirect()->route('developer.dashboard')->with('error', 'Product not found');
         }
-
+        $del_img = public_path('storage/images/'.$item->image_path);
+        if(file_exists($del_img)){
+            unlink($del_img);
+        }
         $item->delete();
 
         return redirect()->route('developer.dashboard')->with('success', 'Product deleted successfully');
@@ -67,10 +71,43 @@ public function store(Request $request)
     public function edit(Request $request, $id)
     {
 
-
          $record = Product::find($id);
-        $newValues = $request->all();
-        $record->update($newValues);
-        return redirect()->route('developer.dashboard')->with('success', 'Product updated successfully');
+
+
+        $record->update([
+                    'name' => $request->name,
+                    'description'=>$request->description,
+                    'price'=>$request->price,
+                    'material'=>$request->material,
+                    'branch_id'=>$request->branch_id,
+                
+                ]);
+         if($request->image_path != null ){
+
+
+
+
+            
+                $image = $request->image_path;
+                $img_name = $image->getClientOriginalName();
+                $del_img = public_path('storage/images/'.$img_name);
+                $del_imgprev = public_path('storage/images/'.$record->image_path);
+                if(file_exists($del_imgprev)){
+                    unlink($del_imgprev);
+                }
+                if(file_exists($del_img)){
+                    unlink($del_img);
+                }
+                $image->storeAs('public/images', $img_name);
+                $record->update([
+                    'image_path' => $img_name
+                
+                ]);
+               
+         }
+            return redirect()->route('developer.dashboard')->with('success', 'Product updated successfully');
+
+         
+       
     }
 }

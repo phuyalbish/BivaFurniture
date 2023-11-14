@@ -43,12 +43,6 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-						<th>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="selectAll">
-								<label for="selectAll"></label>
-							</span>
-						</th>
 						<th>Image</th>
                         <th>Name</th>
                         <th>Description</th>
@@ -62,13 +56,7 @@
                    	
 						  @foreach($product_array as $item)			 
 					<tr>
-						<td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox5" name="options[]" value="1">
-								<label for="checkbox5"></label>
-							</span>
-						</td>
-
+						
 						<td><img src="{{ asset('storage/images/'.$item['image_path'])}}" alt="what" width=50 height=50 style="border-radius:50%" >
 						</td>
 						<td>{{ $item['name'] }}</td>
@@ -282,7 +270,7 @@
 	<div id="editFurnitureModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form method="post" id = "editfurnitureform"  action="">
+				<form  enctype="multipart/form-data"  method="post" id = "editfurnitureform"  action="">
 					@csrf
 					<input type="hidden" name="fur_id">
 					<div class="modal-header">						
@@ -298,13 +286,12 @@
 							<label>Description</label>
 							<input type="text" name="description" id="fur_des" class="form-control" required>
 						</div>
-						<div class="form-group">
-							<img src="" id="fur_image" alt="what" width=200 height=200 >
-							<br>
-							<br>
-							<input type="file" name="image_path" required>
+						<div class="form-group" >
+							<img src="" id="fur_image" alt="what" max-width=100 height=100 class="col-sm-3" >
+							<input type="file" name="image_path"  class="col-sm-6"   accept="image/*" >
 						</div>
-
+<br><br>
+<br>
 						<div class="form-group">
 						<label for="category_id">Category:</label>
 								<select name="branch_id" id="fur_cat" required>
@@ -315,6 +302,8 @@
 									@endforeach
 								</select>
 						</div>
+						<br>
+						<br>
 						<div class="form-group">
 							<label>Price</label>
 							<input type="number" name="price" id="fur_price" class="form-control" required>
