@@ -18,7 +18,7 @@ Home
           BIVA FURNITURE FOR<br />
           YOUR HOME
         </h1>
-        <h3>YOUR LUXURY STARTS HERE</h3>
+        <h3>YOUR LUXURY STARTS HERE <br><br>{{ $alltotalsale }}+ Successful Contracts</h3>
         <button class="buttonmaininfo">Learn More</button>
       </div>
     </div>

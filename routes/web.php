@@ -1,3 +1,5 @@
+
+
 <?php
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AdminController;
@@ -8,6 +10,8 @@ use App\Http\Controllers\HomeController;
 
 
 Route::get('', [HomeController::class, 'home'])->name('home');
+Route::get('/product', [HomeController::class, 'product'])->name('product');
+Route::get('/indivisual/{id}', [HomeController::class, 'ind_product'])->name('ind_product');
 
 Route::get('/contact', function () {
     return view('contact');
@@ -16,6 +20,7 @@ Route::get('/contact', function () {
 Route::get('/aboutus', function () {
     return view('aboutus');
 })->name('aboutus');
+
 
 
 
@@ -31,4 +36,7 @@ Route::post('/category/edit/{id}', [BranchController::class, 'edit'])->name('cat
 Route::post('/furniture/store', [ProductController::class, 'store'])->name('furniture.store');
 Route::delete('/furniture/delete/{id}', [ProductController::class, 'destroy'])->name('furniture.destroy');
 Route::post('/furniture/edit/{id}', [ProductController::class, 'edit'])->name('furniture.edit');
-Route::delete('/furniture/sale/{id}', [ProductController::class, 'sale'])->name('furniture.changesale');
+Route::post('/furniture/sale/{id}', [ProductController::class, 'sale'])->name('furniture.changesale');
+
+Route::post('/basic/edit', [ProductController::class, 'basicedit'])->name('basic.edit');
+

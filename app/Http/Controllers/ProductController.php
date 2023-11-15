@@ -1,9 +1,9 @@
 <?php
-  
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\BasicInfo;
 
 class ProductController extends Controller
 {
@@ -100,4 +100,22 @@ public function store(Request $request)
         return redirect()->route('developer.dashboard')->with('success', 'Product updated successfully');
           
     }
+
+
+
+    public function basicedit(Request $request)
+    {
+         $record = BasicInfo::find(1);
+            $record->update([
+                    'addredd'=>$request->address,
+                    'link'=>$request->link,
+                    'phone'=>$request->phone,
+                    'email'=>$request->email,
+                    'footer_des'=>$request->des,
+
+                ]);
+            return redirect()->route('developer.dashboard')->with('success', 'Basics updated successfully');
+          
+    } 
 }
+

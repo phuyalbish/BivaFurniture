@@ -18,8 +18,22 @@
     <div class="container">
 				<h2>Admin Panel</h2>
 				<a href="{{route('developer.signout')}}" class="btn btn-success" data-toggle="modal"><span>Signout</span></a>
-				<br>
-				<br>
+				
+				@foreach($basicinfo_array as $item)	
+				<a href="#editbasicModal" 
+				onclick="
+							editBasic(
+							'{{ $item['addredd'] }}',
+							'{{ $item['phone'] }}',
+							'{{ $item['footer_des'] }}',
+							'{{ $item['link'] }}',
+							'{{ $item['email'] }}'
+
+							)" 
+				
+				class="btn btn-success" data-toggle="modal"><span>Add Basic Information</span></a>
+				@endforeach
+				
 				@if(session('error'))
 					<div class="alert alert-danger">
 						{{ session('error') }}
@@ -161,14 +175,65 @@
         </div>
     </div>
 
+
+
+	<!-- Edit Furniture HTML -->
+	<div id="editbasicModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">  
+				<form  enctype="multipart/form-data" method="post"  action="{{ route('basic.edit', ['id' => 1]) }}">
+					@csrf
+					<input type="hidden" name="fur_id">
+					<div class="modal-header">						
+						<h4 class="modal-title">Edit Basics</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						
+						<div class="form-group">
+							<label>Address:</label>
+							<input type="text" name="address"  id="basic_address" class="form-control" required>
+						</div>
+								
+						<div class="form-group">
+							<label>Email</label>
+							<input type="emali" name="email" id="basic_email" class="form-control" required>
+						</div>	
+						<div class="form-group">
+							<label>Instagram Link</label>
+							<input type="text"    name="link" id="basic_link" class="form-control" required>
+						</div>			
+						<div class="form-group">
+							<label>Phone</label>
+							<input type="text"   name="phone" id="basic_phone" class="form-control" required>
+						</div>	
+								
+						<div class="form-group">
+							<label>Footer Description:</label>
+							<input type="text" name="des" id="basic_des" class="form-control" required>
+						</div>					
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="submit" class="btn btn-info" value="Save">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
 	<!-- Tewak Sales HTML -->
 	<div id="addSalesModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form method="POST" id="addSalesForm" action="">
-				
 				@csrf
-					@method('DELETE')
 					<div class="modal-header">						
 						<h4 class="modal-title">Edit Sales</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -194,7 +259,7 @@
 	<div id="deleteFurnitureModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form method="POST" id="deleteFurnitureModal" action="">
+				<form method="POST" id="deletefurnitureform" action="">
 				
 				@csrf
 					@method('DELETE')
@@ -319,7 +384,7 @@
 	<div id="editFurnitureModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form  enctype="multipart/form-data"  method="post" id = "editfurnitureform"  action="">
+				<form  enctype="multipart/form-data"  method="POST" id = "editfurnitureform"  action="">
 					@csrf
 					<input type="hidden" name="fur_id">
 					<div class="modal-header">						
@@ -401,10 +466,20 @@
 
 	<script>
 
+			function editBasic(address,phone,footdes,link,email){
+					document.getElementById("basic_address").value = ""+address;
+					document.getElementById("basic_des").value = footdes;
+					document.getElementById("basic_email").value = ""+email;
+					document.getElementById("basic_link").value = ""+link;
+					document.getElementById("basic_phone").value = ""+phone;
+
+			}
+
 			function  editFur(id, name, description="no des", image, price, category, material){
-					var actionsformfur = "{{ route('furniture.edit', ['id' => ':id']) }}".replace(':id', id);
-					document.getElementById("editfurnitureform").action = actionsformfur;
-					var imagepath = "{{ asset('storage/images/image_path')}}".replace('image_path', image);
+
+					const actionsformcat = "{{ route('furniture.edit', ['id' => ':id']) }}".replace(':id', id);
+					document.getElementById("editfurnitureform").action = actionsformcat;
+					const imagepath = "{{ asset('storage/images/image_path')}}".replace('image_path', image);
 					document.getElementById("fur_name").value = ""+name;
 					document.getElementById("fur_des").value = ""+description;
 					document.getElementById("fur_price").value = price;
@@ -431,6 +506,7 @@
 					document.getElementById("totalsales").value = sale;
 
 			}
+
 			
 	</script>
 </body>

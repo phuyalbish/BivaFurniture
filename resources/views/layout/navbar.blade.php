@@ -1,7 +1,12 @@
 
 <style>
+  *{
+    padding:0px;
+    margin:0px;
+    box-sizing:border-box;
+  }
   .navbar-inverse {
-    background-color: transparent;
+    background-color: #7E4136;
     border: none;
     padding-top: 20px;
   }
@@ -15,24 +20,14 @@
     color: #fff;
   }
   .dropdown-menu {
-    background-color: black;
+    background-color: white;
   }
 </style>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse" >
   <div class="container-fluid">
     <div class="navbar-header">
-      <button
-        type="button"
-        class="navbar-toggle"
-        data-toggle="collapse"
-        data-target="#myNavbar"
-      >
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#"
+      <a class="navbar-brand" href="{{ route('home') }}"
         ><img src="<?php echo asset('assets/image/logo.png') ?>" alt=""
       /></a>
     </div>
@@ -45,7 +40,7 @@
           ></a>
           <ul class="dropdown-menu">
              @foreach($branch_array as $item)
-            <li><a href="#">{{ $item['name'] }}</a></li>
+            <li><a href="{{ route('product') }}">{{ $item['name'] }}</a></li>
             @endforeach
           </ul>
         </li>
@@ -54,23 +49,18 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="#">
+             @foreach($basicinfo_array as $item)
+          <a href=" {{ $item['link'] }}">
+            
             <img src="<?php echo asset('assets/image/instagram.png')?>" alt="" />
           </a>
-        </li>
-        <!-- 
-        <li>
-          <a href="#">
-            <img src="{% static 'images/facebook.png'  %}" alt="" />
-          </a>
+          @endforeach
         </li>
         <li>
-          <a href="#">
-            <img src="{% static 'images/twitter.png'  %}" alt="" />
-          </a>
-        </li> -->
-        <li>
-          <a href=""> <p>/ 9840234923</p></a>
+
+             @foreach($basicinfo_array as $item)
+          <a href=""> <p>/ {{ $item['phone'] }}</p></a>
+          @endforeach
         </li>
       </ul>
     </div>

@@ -14,6 +14,8 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Lobster"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Lily+Script+One&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@300&display=swap" rel="stylesheet"> 
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Monomaniac One"

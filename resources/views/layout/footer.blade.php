@@ -36,73 +36,31 @@
           </h2>
         </header>
 
+             @foreach($basicinfo_array as $item)
         <div class="lead g-font-weight-400 g-mb-40 whitecolor">
           <p>
-            Aliquam dapibus quis sapien id pharetra. Vivamus iaculis est vitae
-            libero tempus, in sollicitudin est consectetur porttitor iaculis
-            pretium
+            {{ $item['footer_des'] }}
           </p>
         </div>
 
         <address class="text-uppercase g-line-height-2 g-mb-40">
           <p class="whitecolor">
             Email:
-
-            <a
-              class="g-color-white whitecolor"
-              href="mailto:marketing@unify.com"
-            >
-              <strong>info@htmlstream.com</strong></a
-            >
+            <aclass="g-color-white whitecolor" href="mailto:marketing@unify.com">
+              <strong> {{ $item['email'] }}</strong></a >
           </p>
 
           <p class="whitecolor">
             Phone number:
-            <strong class="g-color-white whitecolor">+48 555 2566 112</strong>
+            <strong class="g-color-white whitecolor">+977 {{ $item['phone'] }}</strong>
           </p>
 
           <p class="whitecolor">
             Address:
-            <strong class="g-color-white whitecolor"
-              >In sed lectus tincidunt</strong
-            >
+            <strong class="g-color-white whitecolor"> {{ $item['addredd'] }}</strong>
           </p>
         </address>
-
-        <ul class="list-inline mb-0">
-          <li class="list-inline-item g-mx-5">
-            <a
-              class="u-icon-v3 u-icon-size--sm g-font-size-default g-color-primary g-bg-white g-bg-black-opacity-0_9--hover"
-              href="#!"
-            >
-              <i class="fa fa-facebook"></i>
-            </a>
-          </li>
-          <li class="list-inline-item g-mx-5">
-            <a
-              class="u-icon-v3 u-icon-size--sm g-font-size-default g-color-primary g-bg-white g-bg-black-opacity-0_9--hover"
-              href="#!"
-            >
-              <i class="fa fa-instagram"></i>
-            </a>
-          </li>
-          <li class="list-inline-item g-mx-5">
-            <a
-              class="u-icon-v3 u-icon-size--sm g-font-size-default g-color-primary g-bg-white g-bg-black-opacity-0_9--hover"
-              href="#!"
-            >
-              <i class="fa fa-twitter"></i>
-            </a>
-          </li>
-          <li class="list-inline-item g-mx-5">
-            <a
-              class="u-icon-v3 u-icon-size--sm g-font-size-default g-color-primary g-bg-white g-bg-black-opacity-0_9--hover"
-              href="#!"
-            >
-              <i class="fa fa-youtube"></i>
-            </a>
-          </li>
-        </ul>
+      @endforeach
       </div>
     </div>
     <!-- End Footer Content -->
@@ -143,11 +101,8 @@
               placeholder="Message"
             ></textarea>
           </div>
-          <button
-            class="btn btn-md u-btn-primary g-font-size-12 text-uppercase rounded-0 g-py-11 g-px-30"
-            type="submit"
-            role="button"
-          >
+          <button class="btn btn-md u-btn-primary g-font-size-12 text-uppercase rounded-0 g-py-11 g-px-30" 
+            role="button">
             Send Message
           </button>
         </form>
@@ -166,7 +121,7 @@
 
       <div class="col-md-6 align-self-center text-md-right">
         <small class="g-font-size-default whitecolor"
-          >© 2018 All right reserved. By the folks behind
+          >© 2023 All right reserved. 
         </small>
       </div>
     </div>

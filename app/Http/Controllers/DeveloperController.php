@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\Product;
+use App\Models\BasicInfo;
 
 class DeveloperController extends Controller
 {
@@ -39,13 +40,15 @@ class DeveloperController extends Controller
 
 
     function CMSDashboard(){
+
+         $basicinfo = BasicInfo::all();
         $item = new Product;
         $branches = Branch::all();
-        $products = $item->joinCategory()->select('products.*', 'branches.name as category') ->get();
+        $products = $item->joinCategory()->select('products.*', 'branches.name as category')->get();
 
 
         $product_array = $products->toArray();
-         return view('dashboard',[ 'branch_array' => $branches->toArray(), 'product_array' => $products->toArray() ]);
+         return view('dashboard',[ 'basicinfo_array'=> $basicinfo->toArray(), 'branch_array' => $branches->toArray(), 'product_array' => $products->toArray() ]);
    
     }
     /**
