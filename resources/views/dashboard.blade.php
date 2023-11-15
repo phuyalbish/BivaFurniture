@@ -49,9 +49,10 @@
 						<th>Image</th>
                         <th>Name</th>
                         <th>Description</th>
-                        <th>Price</th>
                         <th>Category</th>
                         <th>Material</th>
+                        <th>Price</th>
+						<th>Sales</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -63,18 +64,21 @@
 						<td><img src="{{ asset('storage/images/'.$item['image_path'])}}" alt="what" width=50 height=50 style="border-radius:50%" >
 						</td>
 						<td>{{ $item['name'] }}</td>
-						<td>{{ $item['description'] }}</td>
+						<td width="300px" >{{ $item['pro_des'] }}</td>
 						
-						<td>{{ $item['price'] }}</td>
 						<td>{{ $item['category'] }}</td>
 						<td>{{ $item['material'] }}</td>
+						<td>{{ $item['price'] }}</td>
+						<td>
+							<a onclick="addSale('{{ $item['id'] }}', '{{ $item['totalsale'] }}')" href="#addSalesModal" style="padding:10px height:0px;" class="btn btn-success" data-toggle="modal"><span style="color:#fff">{{ $item['totalsale'] }}</span></a>
+						
+						</td>
                         <td>
                             <a onclick="
 							editFur(
-
 							'{{ $item['id'] }}',
 							'{{ $item['name'] }}',
-							'{{ $item['description'] }}',
+							'{{ $item['pro_des'] }}',
 							'{{ $item['image_path'] }}',
 							'{{ $item['price'] }}',
 							'{{ $item['branch_id'] }}',
@@ -157,12 +161,41 @@
         </div>
     </div>
 
+	<!-- Tewak Sales HTML -->
+	<div id="addSalesModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form method="POST" id="addSalesForm" action="">
+				
+				@csrf
+					@method('DELETE')
+					<div class="modal-header">						
+						<h4 class="modal-title">Edit Sales</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">				
+
+							<input type="number" id="totalsales" name="sales" id="fur_des" class="form-control" required>
+						<p class="text-success"><small>Add the total number of sales happened to this product</small></p>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="submit" class="btn btn-success" value="Change">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+
+
 	<!-- Delete Furniture HTML -->
 	<div id="deleteFurnitureModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form method="POST" id="deletefurnitureform" action="">
-				<form>	
+				<form method="POST" id="deleteFurnitureModal" action="">
+				
 				@csrf
 					@method('DELETE')
 					<div class="modal-header">						
@@ -221,7 +254,7 @@
 						</div>
 						<div class="form-group">
 							<label>Description</label>
-							<input type="text" name="description" class="form-control" required>
+							<input type="text" name="des" class="form-control" required>
 						</div>
 						<div class="form-group">
 							<label>Image</label>
@@ -300,7 +333,7 @@
 						</div>
 						<div class="form-group">
 							<label>Description</label>
-							<input type="text" name="description" id="fur_des" class="form-control" required>
+							<input type="text" name="des" id="fur_des" class="form-control" required>
 						</div>
 						<div class="form-group" >
 							<img src="{" id="fur_image" alt="what" max-width=100 height=100 class="col-sm-3" ">
@@ -368,7 +401,7 @@
 
 	<script>
 
-			function  editFur(id, name, description, image, price, category, material){
+			function  editFur(id, name, description="no des", image, price, category, material){
 					var actionsformfur = "{{ route('furniture.edit', ['id' => ':id']) }}".replace(':id', id);
 					document.getElementById("editfurnitureform").action = actionsformfur;
 					var imagepath = "{{ asset('storage/images/image_path')}}".replace('image_path', image);
@@ -392,7 +425,12 @@
 				const actionform = "{{ route('furniture.destroy', ['id' => ':id']) }}".replace(':id', id);
 				document.getElementById("deletefurnitureform").action =  actionform;
 			}
+			function addSale(id,sale){
+				const actionform = "{{ route('furniture.changesale', ['id' => ':id']) }}".replace(':id', id);
+				document.getElementById("addSalesForm").action =  actionform;
+					document.getElementById("totalsales").value = sale;
 
+			}
 			
 	</script>
 </body>

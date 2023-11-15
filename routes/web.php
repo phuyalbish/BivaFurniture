@@ -31,3 +31,4 @@ Route::post('/category/edit/{id}', [BranchController::class, 'edit'])->name('cat
 Route::post('/furniture/store', [ProductController::class, 'store'])->name('furniture.store');
 Route::delete('/furniture/delete/{id}', [ProductController::class, 'destroy'])->name('furniture.destroy');
 Route::post('/furniture/edit/{id}', [ProductController::class, 'edit'])->name('furniture.edit');
+Route::delete('/furniture/sale/{id}', [ProductController::class, 'sale'])->name('furniture.changesale');

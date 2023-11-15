@@ -29,7 +29,7 @@ public function store(Request $request)
             // return dd($name);
             $uploaddata = new Product;
             $uploaddata->name = $request->name;
-            $uploaddata->description = $request->description;
+            $uploaddata->pro_des = $request->des;
             $uploaddata->price = $request->price;
             $uploaddata->material = $request->material;
             $uploaddata->branch_id = $request->branch_id;
@@ -65,7 +65,7 @@ public function store(Request $request)
          $record = Product::find($id);
             $record->update([
                     'name' => $request->name,
-                    'description'=>$request->description,
+                    'pro_des'=>$request->des,
                     'price'=>$request->price,
                     'material'=>$request->material,
                     'branch_id'=>$request->branch_id,
@@ -87,6 +87,17 @@ public function store(Request $request)
                 ]);
             }
             return redirect()->route('developer.dashboard')->with('success', 'Product updated successfully');
+          
+    }
+
+     public function sale(Request $request, $id)
+    {
+
+         $record = Product::find($id); 
+         $record->update([
+                    'totalsale' => $request->sales
+                ]);
+        return redirect()->route('developer.dashboard')->with('success', 'Product updated successfully');
           
     }
 }

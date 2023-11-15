@@ -12,7 +12,7 @@ class Product extends Model
     protected $primaryKey = "id";
 
 
-    protected $fillable = ['name', 'description','image_path','price','material','branch_id'];
+    protected $fillable = ['name', 'pro_des','image_path','price','material','branch_id', 'totalsale'];
     public function branch()
     {
         return $this->belongsTo(Branch::class);
