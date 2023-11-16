@@ -9,6 +9,25 @@ use App\Models\BasicInfo;
 
 class HomeController extends Controller
 {
+
+
+    public function aboutus(){
+        $branches = Branch::all();
+         $basicinfo = BasicInfo::all();
+         
+         return view('aboutus',[ 'basicinfo_array'=> $basicinfo->toArray(), 'branch_array' => $branches->toArray()]);
+    }
+
+    public function contact(){
+        $branches = Branch::all();
+         $basicinfo = BasicInfo::all();
+         return view('contact',[ 
+          'basicinfo_array'=> $basicinfo->toArray(), 
+         'branch_array' => $branches->toArray()
+        ]);
+    }
+
+
    public function home(){
         $branches = Branch::all();
          $alltotalsale = Product::sum('totalsale');
@@ -40,4 +59,7 @@ class HomeController extends Controller
       return view('indivisualproduct',[ 'basicinfo_array'=> $basicinfo->toArray(), 'branch_array' => $branches->toArray(), 'product_array' => $products->toArray()]);
            
     }
+
+
+    
 }

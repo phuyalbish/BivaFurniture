@@ -1,5 +1,3 @@
-
-
 <?php
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AdminController;
@@ -17,17 +15,11 @@ Route::get('storage-link', function(){
 
 
 Route::get('', [HomeController::class, 'home'])->name('home');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/aboutus', [HomeController::class, 'aboutus'])->name('aboutus');
+
 Route::get('/product', [HomeController::class, 'product'])->name('product');
 Route::get('/indivisual/{id}', [HomeController::class, 'ind_product'])->name('ind_product');
-
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-
-Route::get('/aboutus', function () {
-    return view('aboutus');
-})->name('aboutus');
-
 
 
 
